@@ -1,9 +1,9 @@
 
 # Shopify Function App – Product Discount Extension
 
-This repository contains a Shopify app that implements a **Product Discount Function** as an [extension-only app](https://shopify.dev/docs/apps/build/app-extensions/build-extension-only-app). It uses Shopify Functions to apply dynamic, customer-specific discounts to products in the cart based on product metafields and customer metafields.
+This repository contains a Shopify app that implements a **Product Discount Function** using an [extension-only app architecture](https://shopify.dev/docs/apps/build/app-extensions/build-extension-only-app). It uses Shopify Functions to apply dynamic, customer-specific discounts based on product and customer metafields.
 
-> 💡 This app template does **not** include a backend server or admin embedding. If you need those features, consider the [Remix app template](https://github.com/Shopify/shopify-app-template-remix).
+> 💡 This project is already configured and includes all necessary files for the discount function. Follow the instructions below to clone and deploy it to a new Shopify development store.
 
 ---
 
@@ -20,71 +20,60 @@ The discount also requires a logged-in customer with a specific customer metafie
 
 ## Requirements
 
-Before you begin, ensure the following are set up:
+Before you begin, make sure you have:
 
 1. [Node.js](https://nodejs.org/en/download/)
-2. [Shopify Partner account](https://partners.shopify.com/signup)
-3. A [development store](https://help.shopify.com/en/partners/dashboard/development-stores#create-a-development-store) or [Plus sandbox store](https://help.shopify.com/en/partners/dashboard/managing-stores/plus-sandbox-store)
+2. A [Shopify Partner account](https://partners.shopify.com/signup)
+3. A [development store](https://help.shopify.com/en/partners/dashboard/development-stores#create-a-development-store)
 
 ---
 
-## Installing the Template
+## Getting Started with This Repository
 
-Use your preferred package manager to scaffold a new app with Shopify CLI:
+To use this function in a new store:
 
-### Using yarn:
-
-```bash
-yarn create @shopify/app
-```
-
-### Using npm:
+### 1. Clone the repository
 
 ```bash
-npm init @shopify/app@latest
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
 ```
 
-### Using pnpm:
+### 2. Install dependencies
+
+Using your preferred package manager:
 
 ```bash
-pnpm create @shopify/app@latest
+npm install
+# or
+yarn install
+# or
+pnpm install
 ```
 
-During setup, select **Function - Product Discount** when prompted for extension types.
-
----
-
-## Local Development
-
-The Shopify CLI runs your app locally and handles all required authentication and linking.
-
-To start local development:
-
-### Using yarn:
+### 3. Link your Shopify app
 
 ```bash
-yarn dev
+shopify app link
 ```
 
-### Using npm:
+Follow the prompts to connect to your app in the Partner Dashboard.
+
+### 4. Deploy the extension
+
+Run the following to push your function extension to Shopify:
 
 ```bash
-npm run dev
+shopify app deploy
 ```
 
-### Using pnpm:
-
-```bash
-pnpm run dev
-```
-
-Once the app is running, the CLI will provide a preview URL to test the discount in a development store.
+Then, enable the function in your Shopify admin (under "Discounts > Function discounts").
 
 ---
 
 ## Metafield Structure
 
-### Product Metafield (namespace/key: `custom.discount_data`)
+### Product Metafield (`custom.discount_data`)
 
 ```json
 [
@@ -102,13 +91,13 @@ Once the app is running, the CLI will provide a preview URL to test the discount
 ]
 ```
 
-### Customer Metafield (namespace/key: `custom.number`)
+### Customer Metafield (`custom.number`)
 
 ```json
 "card-12345"
 ```
 
-Both metafields must be present and correctly formatted for the function to apply discounts.
+Both metafields must be present and correctly formatted for the discount function to activate.
 
 ---
 
@@ -116,5 +105,4 @@ Both metafields must be present and correctly formatted for the function to appl
 
 - [Shopify Functions](https://shopify.dev/docs/api/functions)
 - [App extensions](https://shopify.dev/docs/apps/build/app-extensions)
-- [Extension-only apps](https://shopify.dev/docs/apps/build/app-extensions/build-extension-only-app)
 - [Shopify CLI](https://shopify.dev/docs/apps/tools/cli)
