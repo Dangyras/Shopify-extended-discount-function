@@ -27,7 +27,7 @@ export function run(input) {
   const numberMetafield = customer?.metafield?.value;
   if (!numberMetafield || numberMetafield.trim() === "") {
     console.error("Customer does not have required metafield `custom.number`.");
-    // return EMPTY_DISCOUNT;
+    return EMPTY_DISCOUNT;
   }
 
   const discounts = [];
@@ -48,9 +48,6 @@ export function run(input) {
       console.error(`Invalid JSON in product metafield: ${metafieldValue}`);
       continue;
     }
-
-    
-    console.log(discountEntries);
 
     if (!Array.isArray(discountEntries)) continue;
 
