@@ -66,11 +66,10 @@ export function run(input) {
       const amount = Number(entry.discount_amount);
       const message = entry.discount_message;
 
-      if(type !== "buyXgetZ") {
-        if (!amount || isNaN(amount)) continue;
-      }
+      if (type !== "buyXgetZ" && (!amount || isNaN(amount))) continue;
 
-      if (type === "single") {
+
+      if (type === "percentage") {
         // Always apply single discount
         if (!bestDiscount || amount > bestDiscount.amount) {
           bestDiscount = { amount, message };
@@ -84,20 +83,16 @@ export function run(input) {
         }
       }
 
-      if (type === "money") {
+      if (type === "fixed") {
         if (!amount || isNaN(amount)) continue;
-
         if (!bestDiscount || amount > bestDiscount.amount) {
           bestDiscount = { amount, message, isFixed: true };
         }
       }
 
-      if (type === "buyXgetZ" && lineQty >= entry.qty) {
+      if (type === "buyXgetY" && lineQty >= entry.qty) {
         let [buyAmount, freeAmount] = entry.discount_amount.split('/').map(Number);
         let percAmount = Number(calculateDiscountPercentage(lineQty, buyAmount, freeAmount));
-
-        console.log(lineQty, buyAmount, freeAmount, percAmount, entry.discount_amount);
-
         if (!bestDiscount || percAmount > bestDiscount.amount) {
           bestDiscount = { amount: percAmount, message };
         }
