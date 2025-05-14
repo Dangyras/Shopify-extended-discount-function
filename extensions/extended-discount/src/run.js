@@ -13,6 +13,13 @@ const EMPTY_DISCOUNT = {
   discounts: [],
 };
 
+const calculateDiscountPercentage = (quantity, buyAmount, freeAmount) => {
+  const fullGroups = Math.floor(quantity / buyAmount);
+  const freeItems = fullGroups * freeAmount;
+  const discountPercent = (freeItems / quantity) * 100;
+  return discountPercent.toFixed(6);
+}
+
 /**
  * @param {RunInput} input
  * @returns {FunctionRunResult}
@@ -59,7 +66,9 @@ export function run(input) {
       const amount = Number(entry.discount_amount);
       const message = entry.discount_message;
 
-      if (!amount || isNaN(amount)) continue;
+      if(type !== "buyXgetZ") {
+        if (!amount || isNaN(amount)) continue;
+      }
 
       if (type === "single") {
         // Always apply single discount
@@ -72,6 +81,17 @@ export function run(input) {
         // Only apply if quantity requirement is met
         if (!bestDiscount || amount > bestDiscount.amount) {
           bestDiscount = { amount, message };
+        }
+      }
+
+      if (type === "buyXgetZ" && lineQty >= entry.qty) {
+        let [buyAmount, freeAmount] = entry.discount_amount.split('/').map(Number);
+        let percAmount = Number(calculateDiscountPercentage(lineQty, buyAmount, freeAmount));
+
+        console.log(lineQty, buyAmount, freeAmount, percAmount, entry.discount_amount);
+
+        if (!bestDiscount || percAmount > bestDiscount.amount) {
+          bestDiscount = { amount: percAmount, message };
         }
       }
     }
