@@ -1,78 +1,120 @@
-# Shopify App Template - Extension only
 
-This is a template for building an [extension-only Shopify app](https://shopify.dev/docs/apps/build/app-extensions/build-extension-only-app). It contains the basics for building a Shopify app that uses only app extensions.
+# Shopify Function App – Product Discount Extension
 
-This template doesn't include a server or the ability to embed a page in the Shopify Admin. If you want either of these capabilities, choose the [Remix app template](https://github.com/Shopify/shopify-app-template-remix) instead.
+This repository contains a Shopify app that implements a **Product Discount Function** as an [extension-only app](https://shopify.dev/docs/apps/build/app-extensions/build-extension-only-app). It uses Shopify Functions to apply dynamic, customer-specific discounts to products in the cart based on product metafields and customer metafields.
 
-Whether you choose to use this template or another one, you can use your preferred package manager and the Shopify CLI with [these steps](#installing-the-template).
+> 💡 This app template does **not** include a backend server or admin embedding. If you need those features, consider the [Remix app template](https://github.com/Shopify/shopify-app-template-remix).
 
-## Benefits
+---
 
-Shopify apps are built on a variety of Shopify tools to create a great merchant experience. The [create an app](https://shopify.dev/docs/apps/getting-started/create) tutorial in our developer documentation will guide you through creating a Shopify app.
+## Overview
 
-This app template does little more than install the CLI and scaffold a repository.
+This extension applies a discount to cart items based on structured JSON data stored in product metafields. Discounts can be:
 
-## Getting started
+- A **single discount** (applied regardless of quantity)
+- A **bundle discount** (applied only when a quantity threshold is met)
 
-### Requirements
+The discount also requires a logged-in customer with a specific customer metafield (`custom.number`) to be present.
 
-1. You must [download and install Node.js](https://nodejs.org/en/download/) if you don't already have it.
-1. You must [create a Shopify partner account](https://partners.shopify.com/signup) if you don’t have one.
-1. You must create a store for testing if you don't have one, either a [development store](https://help.shopify.com/en/partners/dashboard/development-stores#create-a-development-store) or a [Shopify Plus sandbox store](https://help.shopify.com/en/partners/dashboard/managing-stores/plus-sandbox-store).
+---
 
-### Installing the template
+## Requirements
 
-This template can be installed using your preferred package manager:
+Before you begin, ensure the following are set up:
 
-Using yarn:
+1. [Node.js](https://nodejs.org/en/download/)
+2. [Shopify Partner account](https://partners.shopify.com/signup)
+3. A [development store](https://help.shopify.com/en/partners/dashboard/development-stores#create-a-development-store) or [Plus sandbox store](https://help.shopify.com/en/partners/dashboard/managing-stores/plus-sandbox-store)
 
-```shell
+---
+
+## Installing the Template
+
+Use your preferred package manager to scaffold a new app with Shopify CLI:
+
+### Using yarn:
+
+```bash
 yarn create @shopify/app
 ```
 
-Using npm:
+### Using npm:
 
-```shell
+```bash
 npm init @shopify/app@latest
 ```
 
-Using pnpm:
+### Using pnpm:
 
-```shell
+```bash
 pnpm create @shopify/app@latest
 ```
 
-This will clone the template and install the required dependencies.
+During setup, select **Function - Product Discount** when prompted for extension types.
 
-#### Local Development
+---
 
-[The Shopify CLI](https://shopify.dev/docs/apps/tools/cli) connects to an app in your Partners dashboard. It provides environment variables and runs commands in parallel.
+## Local Development
 
-You can develop locally using your preferred package manager. Run one of the following commands from the root of your app.
+The Shopify CLI runs your app locally and handles all required authentication and linking.
 
-Using yarn:
+To start local development:
 
-```shell
+### Using yarn:
+
+```bash
 yarn dev
 ```
 
-Using npm:
+### Using npm:
 
-```shell
+```bash
 npm run dev
 ```
 
-Using pnpm:
+### Using pnpm:
 
-```shell
+```bash
 pnpm run dev
 ```
 
-Open the URL generated in your console. Once you grant permission to the app, you can start development (such as generating extensions).
+Once the app is running, the CLI will provide a preview URL to test the discount in a development store.
 
-## Developer resources
+---
 
-- [Introduction to Shopify apps](https://shopify.dev/docs/apps/getting-started)
+## Metafield Structure
+
+### Product Metafield (namespace/key: `custom.discount_data`)
+
+```json
+[
+  {
+    "type": "single",
+    "discount_message": "15% off for [collection 1] products",
+    "discount_amount": 15
+  },
+  {
+    "type": "bundle",
+    "discount_message": "25% off for [collection 2] products",
+    "discount_amount": 25,
+    "qty": 4
+  }
+]
+```
+
+### Customer Metafield (namespace/key: `custom.number`)
+
+```json
+"card-12345"
+```
+
+Both metafields must be present and correctly formatted for the function to apply discounts.
+
+---
+
+## Developer Resources
+
+- [Shopify Functions](https://shopify.dev/docs/api/functions)
 - [App extensions](https://shopify.dev/docs/apps/build/app-extensions)
-- [Extension only apps](https://shopify.dev/docs/apps/build/app-extensions/build-extension-only-app)
+- [Extension-only apps](https://shopify.dev/docs/apps/build/app-extensions/build-extension-only-app)
 - [Shopify CLI](https://shopify.dev/docs/apps/tools/cli)
