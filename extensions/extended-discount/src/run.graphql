@@ -1,0 +1,26 @@
+query RunInput {
+  cart {
+    buyerIdentity {
+      customer {
+        id
+        metafield(namespace: "custom", key: "card_number") {
+          value
+        }
+      }
+    }
+    lines {
+      id
+      quantity
+      merchandise {
+        ... on ProductVariant {
+          id
+          product {
+            metafield(namespace: "custom", key: "discount_data") {
+              value
+            }
+          }
+        }
+      }
+    }
+  }
+}
