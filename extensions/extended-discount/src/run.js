@@ -84,6 +84,14 @@ export function run(input) {
         }
       }
 
+      if (type === "money") {
+        if (!amount || isNaN(amount)) continue;
+
+        if (!bestDiscount || amount > bestDiscount.amount) {
+          bestDiscount = { amount, message, isFixed: true };
+        }
+      }
+
       if (type === "buyXgetZ" && lineQty >= entry.qty) {
         let [buyAmount, freeAmount] = entry.discount_amount.split('/').map(Number);
         let percAmount = Number(calculateDiscountPercentage(lineQty, buyAmount, freeAmount));
@@ -106,11 +114,18 @@ export function run(input) {
             },
           }),
         ],
-        value: {
-          percentage: {
-            value: bestDiscount.amount.toString(),
+        value: bestDiscount.isFixed
+        ? {
+            fixedAmount: {
+              amount: bestDiscount.amount.toString(),
+              appliesToEachItem: true,
+            },
+          }
+        : {
+            percentage: {
+              value: bestDiscount.amount.toString(),
+            },
           },
-        },
       });
     }
   }
